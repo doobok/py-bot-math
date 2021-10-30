@@ -1,10 +1,9 @@
 import os
 import logging
-
+from app import app
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
-from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.executor import start_webhook
 
 from dotenv import load_dotenv
@@ -29,18 +28,10 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
 
-@dp.message_handler()
-async def echo(message: types.Message):
-    # Regular request
-    # await bot.send_message(message.chat.id, message.text)
-
-    # or reply INTO webhook
-    return SendMessage(message.chat.id, message.text)
-
-
 async def on_startup(dp):
     await bot.set_webhook(WEBHOOK_URL)
-    # insert code here to run it after start
+    # main HANDLER
+    await app(dp, bot)
 
 
 async def on_shutdown(dp):

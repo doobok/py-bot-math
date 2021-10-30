@@ -1,22 +1,28 @@
 from aiogram import types
-from aiogram.utils import executor
-
-import connect
+from aiogram.dispatcher import Dispatcher
 
 
-# @connect.dp.message_handler(commands=['start', 'help'])
-# async def send_welcome(message: types.Message):
-#     """
-#     This handler will be called when user sends `/start` or `/help` command
-#     """
-#     await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+async def app(dp: Dispatcher, bot):
+    @dp.message_handler(commands=['start'])
+    async def echo(message: types.Message):
 
-@connect.dp.message_handler()
-async def echo(message: types.Message):
-    # old style:
-    # await bot.send_message(message.chat.id, message.text)
+        print('is start command')
 
-    await message.answer(message.text)
+        await bot.send_message(message.chat.id, message.text)
 
-if __name__ == '__main__':
-    executor.start_polling(connect.dp, skip_updates=True)
+    @dp.message_handler(commands=['help'])
+    async def echo(message: types.Message):
+        # Regular request
+        # await bot.send_message(message.chat.id, message.text)
+        print('is help command')
+
+        await bot.send_message(message.chat.id, message.text)
+
+    @dp.message_handler()
+    async def echo(message: types.Message):
+        # Regular request
+        # await bot.send_message(message.chat.id, message.text)
+        print('is another command')
+
+        await bot.send_message(message.chat.id, message.text)
+
